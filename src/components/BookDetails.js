@@ -1,39 +1,63 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link, navigate } from '@reach/router'
 
 import Book from './Book'
 
 class BookDetails extends Component {
   componentDidMount = () => {
-    this.props.startLoadingBooks()
+    if (!this.props.books) {
+      this.props.startLoadingBooks()
+    }
   }
-  render() {
-    const{title, books} = this.props
+  handleSelect = (e, book) => {
+    e.preventDefault()
+    const index = this.props.books.indexOf(book)
+    this.props.selectBook(index, book)
+  }
+  handleUnSelect = (e, book) => {
+    e.preventDefault()
+    const index = this.props.selectedBooks.indexOf(book)
+    this.props.removeSelected(index)
+  }
+  render () {
+    const { title, books, selectedBooks } = this.props
     console.log('books', this.props)
-    const book = books.find(item => item.title === title)
-    if(this.props.books.length > 0) {
+    console.log('selected', this.props.selectedBooks.indexOf)
+    if (this.props.books.length > 0) {
+      const book = books.find(item => item.title === title)
+      const isSelected = selectedBooks.indexOf(book) !== -1
       return (
         <div className='book-details-container'>
-          <Book book={book}/>
+          <Book book={book} />
           <div className='book-detail-panel'>
             <div>
-              <h1>{book.title}</h1>
-              <p>{book.author}</p>
+              <h1>Title: {book.title}</h1>
+              <p>Author: {book.author}</p>
             </div>
             <div>
-              <p>{book.country}</p>
-              <p>{book.language}</p>
-              <p>{book.pages}</p>
-              <p>{book.year}</p>
+              <p>Coutry: {book.country}</p>
+              <p>Language: {book.language}</p>
+              <p>{book.pages} pages</p>
+              <p>Publishing year: {book.year}</p>
             </div>
-            <button>Select</button>
-            <button>Checkout</button>
+            <div />
+            {isSelected ? (
+              <button onClick={e => this.handleUnSelect(e, book)}>
+                Unselect
+              </button>
+            ) : (
+              <button onClick={e => this.handleSelect(e, book)}>Select</button>
+            )}
+            <Link className='button' to='/checkout'>
+              Check Out
+            </Link>
           </div>
         </div>
-      );
+      )
     } else {
-      return <p>loading</p>
+      return () => navigate('/')
     }
   }
 }
 
-export default BookDetails;
+export default BookDetails

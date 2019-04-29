@@ -1,16 +1,29 @@
 import axios from '../helpers/axios_api'
 
-// export const startAddingPost = post => {
-//   return dispatch => {
-//     console.log(post)
-//     return axios
-//       .post('/posts.json', post)
-//       .then(response => {
-//         dispatch(addPost(post))
-//       })
-//       .catch(err => console.log('error', err))
-//   }
-// }
+export const startReservingBooks = books => {
+  return dispatch => {
+    console.log(books)
+    return axios
+      .post(`/reservedBooks.json`, books)
+      .then(response => {
+        dispatch(addReservedBooks(books))
+      })
+      .catch(err => console.log('error', err))
+  }
+}
+export const startLoadingReservedBooks = () => {
+  return dispatch => {
+    return axios.get('/reservedBooks.json').then(response => {
+      let books = []
+      console.log('reserved', response.data)
+      Object.values(response.data).forEach(book => {
+        books.push(book)
+      })
+      console.log('res bbok', books)
+      dispatch(loadReservedBooks(books))
+    })
+  }
+}
 
 export const startLoadingBooks = () => {
   return dispatch => {
@@ -24,36 +37,45 @@ export const startLoadingBooks = () => {
   }
 }
 
-// export const startRemovingPosts = (inde)
+export const clearSelectedBooks = () => {
+  return {
+    type: 'CLEAR_SELECTED_BOOKS'
+  }
+}
 
-// export const removePost = id => {
-//   return {
-//     type: 'REMOVE_POST',
-//     payload: id
-//   }
-// }
+export const addReservedBooks = books => {
+  return {
+    type: 'ADD_RESERVED_BOOKS',
+    books
+  }
+}
 
-// export const addPost = post => {
-//   return {
-//     type: 'ADD_POST',
-//     payload: post
-//   }
-// }
+export const selectBook = (index, book) => {
+  return {
+    type: 'SELECT_BOOK',
+    index,
+    book
+  }
+}
 
-// export const addComment = (comment, postId) => {
-//   return {
-//     type: 'ADD_COMMENT',
-//     payload: {
-//       comment,
-//       postId
-//     }
-//   }
-// }
+export const removeSelected = index => {
+  return {
+    type: 'REMOVE_SELECTED',
+    index
+  }
+}
 
 export const searchBooks = input => {
   return {
     type: 'SEARCH_BOOKS',
     input
+  }
+}
+
+export const loadReservedBooks = books => {
+  return {
+    type: 'LOAD_RESERVED_BOOKS',
+    books
   }
 }
 

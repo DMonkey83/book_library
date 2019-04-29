@@ -1,10 +1,14 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import searchReducer from './searchReducer'
-import bookReducer from './bookReducer';
+import bookReducer from './bookReducer'
+import selectionReducer from './selectionReducer'
+import reservationReducer from './reservationReducer'
 
 const rootReducer = combineReducers({
   books: bookReducer,
-  search: searchReducer
+  search: searchReducer,
+  selected: selectionReducer,
+  reservedBooks: reservationReducer
 })
 
 export default rootReducer

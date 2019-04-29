@@ -1,17 +1,26 @@
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-import * as a from '../actions';
-import Main from '../components/Main';
+import * as a from '../actions'
+import Main from '../components/Main'
 
 const mapStatePostsToProps = state => {
   const books = state.books.filter(book => {
-    return book.title.match(new RegExp(state.search.searchTerm, 'i')) || book.author.match(new RegExp(state.search.searchTerm, 'i'));
- });
+    if (book.title && book.author) {
+      return (
+        book.title.match(new RegExp(state.search.searchTerm, 'i')) ||
+        book.author.match(new RegExp(state.search.searchTerm, 'i'))
+      )
+    } else {
+      return ''
+    }
+  })
 
   return {
     search: state.search,
-    books: books
+    books: books,
+    selectedBooks: state.selected,
+    reservedBooks: state.reservedBooks
   }
 }
 

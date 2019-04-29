@@ -1,15 +1,15 @@
-const reservationReducer = (state = [], action) => {
+const selectionReducer = (state = [], action) => {
   console.log('action', action)
   switch (action.type) {
-    case 'LOAD_RESERVED_BOOKS':
-      return action.books
+    case 'SELECT_BOOK':
+      return [...state, action.book]
     case 'CLEAR_SELECTED_BOOKS':
       return []
-    case 'RETURN_RESERVED':
+    case 'REMOVE_SELECTED':
       return [...state.slice(0, action.index), ...state.slice(action.index + 1)]
     default:
       return state
   }
 }
 
-export default reservationReducer
+export default selectionReducer
