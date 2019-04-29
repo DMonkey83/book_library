@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 
 class SearchBar extends Component {
+  handleSearch = e => {
+    e.persist()
+    let searchTerm = e.target.value
+    this.props.searchBooks(searchTerm)
+    
+  }
   render() {
     return (
       <div className='search-bar-container'>
-        <input className='search-bar' type='text' name='rearch-bar' placeholder='Search'/>
+        <input
+          onChange={e => {this.handleSearch(e)}}
+          className='search-bar'
+          type='text'
+          name='searchBar'
+          placeholder='Search'/>
       </div>
     );
   }

@@ -3,14 +3,13 @@ import React from 'react';
 
 const Book = props => {
   const { book } = props
-  console.log('book', `${book.link}${book.imageLink}`)
   if (book === undefined) {
     return ''
   } else {
     return (
       <figure className='figure'>
           <div className='figure-container'>
-            <Link className='image-link' to={`postdetails/${book.title}`}>
+            <Link className='image-link' to={`bookdetails/${book.title}`}>
               <img
                 className='photo'
                 src={`${book.imageLink}`}

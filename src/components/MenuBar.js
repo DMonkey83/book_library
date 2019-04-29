@@ -3,6 +3,7 @@ import {Link} from '@reach/router';
 
 class MenuBar extends Component {
   render() {
+    console.log('props', this.props)
     return (
       <div className='menu-bar'>
         <div className='menu-bar-title'>Books</div>

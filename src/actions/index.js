@@ -15,10 +15,8 @@ import axios from '../helpers/axios_api'
 export const startLoadingBooks = () => {
   return dispatch => {
     return axios.get('/books.json').then(response => {
-      console.log(response.data)
       let books = []
       response.data.forEach(book => {
-        console.log(book)
         books.push(book)
       })
       dispatch(loadBooks(books))
@@ -51,6 +49,13 @@ export const startLoadingBooks = () => {
 //     }
 //   }
 // }
+
+export const searchBooks = input => {
+  return {
+    type: 'SEARCH_BOOKS',
+    input
+  }
+}
 
 export const loadBooks = books => {
   return {

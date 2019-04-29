@@ -5,8 +5,13 @@ import * as a from '../actions';
 import Main from '../components/Main';
 
 const mapStatePostsToProps = state => {
+  const books = state.books.filter(book => {
+    return book.title.match(new RegExp(state.search.searchTerm, 'i')) || book.author.match(new RegExp(state.search.searchTerm, 'i'));
+ });
+
   return {
-    books: state.books,
+    search: state.search,
+    books: books
   }
 }
 
