@@ -20,7 +20,10 @@ const mapStatePostsToProps = state => {
     search: state.search,
     books: books,
     selectedBooks: state.selected,
-    reservedBooks: state.reservedBooks
+    reservedBooks: state.reservedBooks,
+    user: state.user,
+    visitedPage: state.visitedPage,
+    checkedOut: state.checkedOut
   }
 }
 

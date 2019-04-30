@@ -1,5 +1,4 @@
 const selectionReducer = (state = [], action) => {
-  console.log('action', action)
   switch (action.type) {
     case 'SELECT_BOOK':
       return [...state, action.book]

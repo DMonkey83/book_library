@@ -8,10 +8,13 @@ class BookDetails extends Component {
     if (!this.props.books) {
       this.props.startLoadingBooks()
     }
+    this.props.updateVisitedPage(this.props.path)
   }
-  handleSelect = (e, book) => {
+  handleSelect = (e, book, dueDate) => {
     e.preventDefault()
     const index = this.props.books.indexOf(book)
+    book.DueDate = dueDate 
+    book.index = index
     this.props.selectBook(index, book)
   }
   handleUnSelect = (e, book) => {
@@ -21,11 +24,10 @@ class BookDetails extends Component {
   }
   render () {
     const { title, books, selectedBooks } = this.props
-    console.log('books', this.props)
-    console.log('selected', this.props.selectedBooks.indexOf)
     if (this.props.books.length > 0) {
       const book = books.find(item => item.title === title)
-      const isSelected = selectedBooks.indexOf(book) !== -1
+      const isSelected = selectedBooks && selectedBooks.indexOf(book) !== -1
+      let dueDate = book.extraDueDate ? book.extraDueDate : (book.dueDate ? book.dueDate : '')
       return (
         <div className='book-details-container'>
           <Book book={book} />
@@ -38,7 +40,8 @@ class BookDetails extends Component {
               <p>Coutry: {book.country}</p>
               <p>Language: {book.language}</p>
               <p>{book.pages} pages</p>
-              <p>Publishing year: {book.year}</p>
+              <p>Publishing year: {book.year < 0 ? `${Math.abs(book.year)}BC` : book.year}</p>
+              {dueDate && <p>Book is unavailable till {dueDate} but You can reserve it?</p>}
             </div>
             <div />
             {isSelected ? (
@@ -46,7 +49,7 @@ class BookDetails extends Component {
                 Unselect
               </button>
             ) : (
-              <button onClick={e => this.handleSelect(e, book)}>Select</button>
+              <button onClick={e => this.handleSelect(e, book, dueDate)}>{dueDate ? 'Reserve' : 'Select'}</button>
             )}
             <Link className='button' to='/checkout'>
               Check Out

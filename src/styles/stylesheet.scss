@@ -53,6 +53,9 @@ body {
     text-decoration: none;
     font-size: 1.5rem;
     font-weight: 300;
+    color: rgb(0, 191, 255);
+  }
+  &-item.visited {
     color: rgb(75, 75, 75);
   }
 }
@@ -255,4 +258,15 @@ button:focus,
     transform: translate(-50%, -50%);
     position: absolute;
   }
+}
+
+.book-due-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  line-height: 1rem;
+}
+
+.return {
+  margin-bottom: 2rem;
 }

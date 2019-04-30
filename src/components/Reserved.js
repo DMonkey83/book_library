@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
-import SearchBar from './SearchBar'
+import Book from './Book'
 
 class Reserved extends Component {
   componentDidMount = () => {
-    this.props.startLoadingReservedBooks()
+    this.props.updateVisitedPage(this.props.path)
   }
-
   render () {
     return (
       <div>
-        <SearchBar {...this.props} />
-        Reserved
+        <div className='book-shelf'>
+          {this.props.reservedBooks.map((book, index) => (
+            <Book key={index} book={book} {...this.props} index={index} />
+          ))}
+        </div>
       </div>
     )
   }

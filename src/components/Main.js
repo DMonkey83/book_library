@@ -7,17 +7,41 @@ import Title from './Title'
 import BookDetails from './BookDetails'
 import Reserved from './Reserved'
 import Checkout from './Checkout'
+import CheckedOut from './CheckedOut'
 
 export default class Main extends Component {
   componentDidMount = () => {
+    this.props.startGettingUserDetails()
     this.props.startLoadingBooks()
+    this.props.startLoadingReservedBookList()
+    this.props.startLoadingCheckedOutBooks()
   }
   render () {
+    let page = 'browse'
+    switch (this.props.visitedPage) {
+      case '/':
+        page = 'browse'
+        break
+      case 'bookdetails/:title':
+        page = 'browse'
+        break
+      case 'checkout':
+        page = 'checkout'
+        break
+      case 'checkedout':
+        page = 'checkedOut'
+        break
+      case 'reserved':
+        page = 'reserved'
+        break
+      default:
+        page = 'browse'
+    }
     return (
       <div className='main-container'>
         <div className='side-bar'>
           <Title text='The Library' />
-          <MenuBar {...this.props} />
+          <MenuBar {...this.props} page={page}/>
         </div>
         {!this.props.books ? (
           <div>Loading</div>
@@ -28,6 +52,7 @@ export default class Main extends Component {
                 <BookShelf path='/' {...this.props} />
                 <BookDetails path='bookdetails/:title' {...this.props} />
                 <Reserved path='reserved' {...this.props} />
+                <CheckedOut path='checkedout' {...this.props} />
                 <Checkout path='checkout' {...this.props} />
               </Router>
             </div>

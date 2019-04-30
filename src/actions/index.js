@@ -1,27 +1,88 @@
 import axios from '../helpers/axios_api'
 
-export const startReservingBooks = books => {
+export const startReservingBooks = book => {
   return dispatch => {
-    console.log(books)
-    return axios
-      .post(`/reservedBooks.json`, books)
+    return axios.post(`/reservedBookList.json`, book)
+    .then(response => {
+      return axios.put(`/books/${book.index}.json`, book)
       .then(response => {
-        dispatch(addReservedBooks(books))
+        dispatch(startLoadingBooks())
+        dispatch(startLoadingReservedBookList())
+      })
+    }).catch(err => console.log('error', err))
+  }
+}
+
+export const startCheckingOutBooks = book => {
+  return dispatch => {
+    return axios
+      .post(`/checkedOutBooks.json`, book)
+      .then(response => {
+        return axios.put(`/books/${book.index}.json`, book)
+        .then(response => {
+          dispatch(startLoadingBooks())
+          dispatch(startLoadingCheckedOutBooks())
+        })
       })
       .catch(err => console.log('error', err))
   }
 }
-export const startLoadingReservedBooks = () => {
+
+export const startRemovingCheckedOutBook = index => {
   return dispatch => {
-    return axios.get('/reservedBooks.json').then(response => {
+    return axios
+      .delete(`/checkedOutBooks/${index}.json`)
+      .then(response => {
+        dispatch(startLoadingBooks())
+        dispatch(startLoadingCheckedOutBooks())
+      })
+      .catch(err => console.log('error', err))
+  }
+}
+
+export const startLoadingReservedBookList = () => {
+  return dispatch => {
+    return axios.get(`/reservedBookList.json`).then(response => {
       let books = []
-      console.log('reserved', response.data)
       Object.values(response.data).forEach(book => {
         books.push(book)
       })
-      console.log('res bbok', books)
       dispatch(loadReservedBooks(books))
     })
+    .catch(err => console.log('error', err))
+  }
+}
+
+export const startLoadingCheckedOutBooks = () => {
+  return dispatch => {
+    return axios.get(`/checkedOutBooks.json`).then(response => {
+      let books = []
+      Object.keys(response.data).forEach(index => {
+        response.data[index].extraIndex = index
+        books.push(response.data[index])
+      })
+      dispatch(loadCheckedOutBooks(books))
+    })
+    .catch(err => {
+     dispatch(loadCheckedOutBooks([]))
+     console.log('error', err)
+    })
+  }
+}
+
+export const startGettingUserDetails = () => {
+  return dispatch => {
+    return axios.get('/user.json').then(response => {
+      let user = response.data
+      dispatch(updateUserDetails(user))
+    })
+  }
+}
+
+export const updateVisitedPage = (page) => {
+  return {
+    type: 'UPDATE_VISITED_PAGE',
+    page
   }
 }
 
@@ -34,6 +95,13 @@ export const startLoadingBooks = () => {
       })
       dispatch(loadBooks(books))
     })
+  }
+}
+
+export const updateUserDetails = user => {
+  return {
+    type: 'UPDATE_USER_DETAILS',
+    user
   }
 }
 
@@ -75,6 +143,13 @@ export const searchBooks = input => {
 export const loadReservedBooks = books => {
   return {
     type: 'LOAD_RESERVED_BOOKS',
+    books
+  }
+}
+
+export const loadCheckedOutBooks = books => {
+  return {
+    type: 'LOAD_CHECKED_OUT_BOOKS',
     books
   }
 }

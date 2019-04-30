@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 
 import Book from './Book'
-import SearchBar from './SearchBar'
 
 class BookShelf extends Component {
   componentDidMount = () => {
     this.props.updateVisitedPage(this.props.path)
+    if (!this.props.user.name) {
+      this.props.startGettingUserDetails()
+    }
   }
   render () {
-    return (
+   return (
       <div>
-        <SearchBar {...this.props} />
         <div className='book-shelf'>
-          {this.props.books.map((book, index) => (
-            <Book key={index} book={book} {...this.props} index={index} />
-          ))}
+          {
+            this.props.checkedOut.map((book, index) => (
+              <Book key={index} book={book} {...this.props} index={index} />
+            ))
+          }
         </div>
       </div>
     )

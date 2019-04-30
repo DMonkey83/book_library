@@ -3,23 +3,32 @@ import Book from './Book'
 import moment from 'moment'
 
 export default class Checkout extends Component {
+  componentDidMount = () => {
+    this.props.updateVisitedPage(this.props.path)
+  }
   handleSubmit = e => {
     e.preventDefault()
     e.persist()
-    const now = moment().format('YYYY-MM-DD')
-    const reservedBooks = {
-      selectedBooks: this.props.selectedBooks,
-      dateBorrowed: now,
-      lastDateToReturn: moment()
-        .add(2, 'weeks')
-        .format('YYYY-MM-DD'),
-      formData: {
-        name: e.target.elements.yourName.value,
-        cardDetails: e.target.elements.cardDetails.value,
-        address: e.target.elements.address.value
+    const {selectedBooks} = this.props
+    selectedBooks.map(item => {
+      let book = {}
+      if (item.dueDate) {
+        book = (item)
+        if (item.extraDueDate) {
+          book.extraStartDate = item.extraDueDate
+          book.extraDueDate = moment(item.extraDueDate).add(2, 'week').format('YYYY-MM-DD')
+        } else {
+          book.extraStartDate = item.dueDate
+          book.extraDueDate = moment(item.dueDate).add(2, 'week').format('YYYY-MM-DD')
+        }
+        this.props.startReservingBooks(book)
+      } else {
+        book = (item)
+        book.startDate = moment().format('YYYY-MM-DD')
+        book.dueDate = moment().add(2, 'week').format('YYYY-MM-DD')
+        this.props.startCheckingOutBooks(book)
       }
-    }
-    this.props.startReservingBooks(reservedBooks)
+    })
     this.props.clearSelectedBooks()
   }
   render () {
@@ -31,32 +40,12 @@ export default class Checkout extends Component {
             <div className='checkout-details'>
               <div>
                 <h1>YourDetails</h1>
+                <label>{this.props.user.title}</label>
                 <hr />
               </div>
               <form
                 onSubmit={e => this.handleSubmit(e)}
                 className='checkout-form'>
-                <label htmlFor='yourName'>Your Name</label>
-                <input
-                  id='yourName'
-                  type='text'
-                  placeholder='Your name'
-                  name='yourName'
-                />
-                <label htmlFor='cardDetails'>Card Details</label>
-                <input
-                  id='cardDetails'
-                  type='text'
-                  placeholder='Card details'
-                  name='cardDetails'
-                />
-                <label htmlFor='address'>Address</label>
-                <input
-                  id='address'
-                  type='text'
-                  placeholder='Address'
-                  name='address'
-                />
                 <button>Checkout</button>
               </form>
               <p className='checkout-message'>borrow books for two weeks</p>

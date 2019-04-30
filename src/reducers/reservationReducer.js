@@ -1,5 +1,4 @@
 const reservationReducer = (state = [], action) => {
-  console.log('action', action)
   switch (action.type) {
     case 'LOAD_RESERVED_BOOKS':
       return action.books
